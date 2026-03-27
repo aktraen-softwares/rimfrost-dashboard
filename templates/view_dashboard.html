@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}{{ dashboard.title }} - Rimfrost Analytics{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{{ rendered_title }}</h1>
+        <p class="page-subtitle">{{ description }}</p>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('edit_dashboard', dashboard_id=dashboard.id) }}" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M11.5 2.5L13.5 4.5L5 13H3V11L11.5 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+            Edit
+        </a>
+        <form method="POST" action="{{ url_for('delete_dashboard', dashboard_id=dashboard.id) }}" style="display:inline" onsubmit="return confirm('Delete this dashboard?')">
+            <button type="submit" class="btn btn-danger">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 4H13M5 4V3C5 2.44772 5.44772 2 6 2H10C10.5523 2 11 2.44772 11 3V4M6 7V12M10 7V12M4 4L5 14H11L12 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="dashboard-meta">
+    <span class="dashboard-type-badge badge-{{ dashboard.dashboard_type }}">{{ dashboard.dashboard_type | title }}</span>
+    <span class="meta-separator">&bull;</span>
+    <span class="meta-date">Created {{ dashboard.created_at.strftime('%b %d, %Y') if dashboard.created_at else 'recently' }}</span>
+    <span class="meta-separator">&bull;</span>
+    <span class="meta-date">Updated {{ dashboard.updated_at.strftime('%b %d, %Y') if dashboard.updated_at else 'recently' }}</span>
+</div>
+
+<div class="widgets-grid">
+    {% if widgets %}
+        {% for widget in widgets %}
+        <div class="widget-card widget-{{ widget.widget_type }}">
+            <div class="widget-header">
+                <h3 class="widget-title">{{ widget.title }}</h3>
+                <span class="widget-type-tag">{{ widget.widget_type | title }}</span>
+            </div>
+            <div class="widget-body">
+                {% if widget.widget_type == 'kpi' %}
+                <div class="kpi-display">
+                    <span class="kpi-value">{{ widget.data_config.get('value', '0') if widget.data_config else '0' }}</span>
+                    <span class="kpi-change {{ 'positive' if widget.data_config and widget.data_config.get('change', 0) > 0 else 'negative' }}">
+                        {% if widget.data_config %}
+                            {% if widget.data_config.get('change', 0) > 0 %}+{% endif %}{{ widget.data_config.get('change', 0) }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </span>
+                </div>
+                {% elif widget.widget_type == 'chart' %}
+                <div class="chart-placeholder">
+                    <svg viewBox="0 0 300 120" class="placeholder-chart">
+                        <polyline points="0,100 30,80 60,90 90,60 120,70 150,40 180,50 210,20 240,35 270,15 300,25"
+                                  fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="0,100 30,80 60,90 90,60 120,70 150,40 180,50 210,20 240,35 270,15 300,25"
+                                  fill="url(#chartGrad)" stroke="none" opacity="0.15"/>
+                        <defs>
+                            <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#6366f1"/>
+                                <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                {% elif widget.widget_type == 'table' %}
+                <div class="table-placeholder">
+                    <div class="table-row table-header-row">
+                        <span>Source</span><span>Visitors</span><span>Conv.</span>
+                    </div>
+                    {% if widget.data_config and widget.data_config.get('rows') %}
+                        {% for row in widget.data_config.get('rows', []) %}
+                        <div class="table-row">
+                            <span>{{ row.get('source', '-') }}</span>
+                            <span>{{ row.get('visitors', '-') }}</span>
+                            <span>{{ row.get('conversion', '-') }}</span>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% elif widget.widget_type == 'bar' %}
+                <div class="bar-chart-placeholder">
+                    {% if widget.data_config and widget.data_config.get('bars') %}
+                        {% for bar in widget.data_config.get('bars', []) %}
+                        <div class="bar-item">
+                            <span class="bar-label">{{ bar.get('label', '') }}</span>
+                            <div class="bar-track">
+                                <div class="bar-fill" style="width: {{ bar.get('percent', 0) }}%"></div>
+                            </div>
+                            <span class="bar-value">{{ bar.get('value', '') }}</span>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="widget-text-content">
+                    {{ widget.data_config.get('content', 'No data') if widget.data_config else 'No data' }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-widgets">
+            <p>No widgets configured for this dashboard.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

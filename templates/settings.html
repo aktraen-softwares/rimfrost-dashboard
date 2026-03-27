@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Settings - Rimfrost Analytics{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Settings</h1>
+        <p class="page-subtitle">Account and application settings</p>
+    </div>
+</div>
+
+<div class="settings-grid">
+    <div class="form-card">
+        <h2 class="card-section-title">Profile</h2>
+        <div class="settings-row">
+            <span class="settings-label">Name</span>
+            <span class="settings-value">{{ user.full_name }}</span>
+        </div>
+        <div class="settings-row">
+            <span class="settings-label">Email</span>
+            <span class="settings-value">{{ user.email }}</span>
+        </div>
+        <div class="settings-row">
+            <span class="settings-label">Role</span>
+            <span class="settings-value">{{ user.role | title }}</span>
+        </div>
+        <div class="settings-row">
+            <span class="settings-label">Department</span>
+            <span class="settings-value">{{ user.department or 'Not set' }}</span>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <h2 class="card-section-title">Application</h2>
+        <div class="settings-row">
+            <span class="settings-label">Version</span>
+            <span class="settings-value">2.4.1</span>
+        </div>
+        <div class="settings-row">
+            <span class="settings-label">Environment</span>
+            <span class="settings-value">Production</span>
+        </div>
+        <div class="settings-row">
+            <span class="settings-label">Timezone</span>
+            <span class="settings-value">UTC</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
