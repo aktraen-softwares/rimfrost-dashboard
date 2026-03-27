@@ -8,7 +8,7 @@ Analytics dashboard platform for Rimfrost Analytics.
 docker compose up -d
 ```
 
-The application will be available at `http://dash.rimfrost.is`.
+The application will be available at `http://dash.rimfrost.com`.
 
 ## Architecture
 

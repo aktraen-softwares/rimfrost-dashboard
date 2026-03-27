@@ -32,9 +32,9 @@ CREATE TABLE widgets (
 
 -- Users
 INSERT INTO users (id, email, password, full_name, role, department) VALUES
-    ('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d', 'auditor@rimfrost.is', 'RF!audit2026', 'Sigrid Halvorsen', 'auditor', 'External Audit'),
-    ('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e', 'erik.nord@rimfrost.is', 'internal_pass', 'Erik Nordberg', 'admin', 'Engineering'),
-    ('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f', 'anna.berg@rimfrost.is', 'internal_pass', 'Anna Bergstrom', 'analyst', 'Analytics');
+    ('a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d', 'auditor@rimfrost.com', 'RF!audit2026', 'Sigrid Halvorsen', 'auditor', 'External Audit'),
+    ('b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e', 'erik.nord@rimfrost.com', 'internal_pass', 'Erik Nordberg', 'admin', 'Engineering'),
+    ('c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f', 'anna.berg@rimfrost.com', 'internal_pass', 'Anna Bergstrom', 'analyst', 'Analytics');
 
 -- Dashboards for auditor
 INSERT INTO dashboards (id, title, description, dashboard_type, owner_id) VALUES
